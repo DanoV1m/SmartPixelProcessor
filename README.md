@@ -17,28 +17,28 @@ SmartPixelProcessor is a powerful MATLAB App Designer application for interactiv
 
 ---
 
-## 📖 Table of Contents
-- [✨ Features](#-features)
-- [🚀 How to Run](#-how-to-run)
-- [🎮 User Guide](#-user-guide)
-- [🧮 Mathematical Foundations & Algorithms](#-mathematical-foundations--algorithms)
-- [🏗️ Architecture & Design](#️-architecture--design)
-- [🎛️ Controls Reference](#️-controls-reference)
-- [💻 Tech Stack](#-tech-stack)
-- [📂 Repository Contents](#-repository-contents)
+##  Table of Contents
+- [ Features](#-features)
+- [ How to Run](#-how-to-run)
+- [ User Guide](#-user-guide)
+- [ Mathematical Foundations & Algorithms](#-mathematical-foundations--algorithms)
+- [ Architecture & Design](#️-architecture--design)
+- [ Controls Reference](#️-controls-reference)
+- [ Tech Stack](#-tech-stack)
+- [ Repository Contents](#-repository-contents)
 
 ---
 
-## ✨ Features
+##  Features
 
-- **🖼️ Universal Image Loading**: Load any RGB or grayscale image using a simple UI.
-- **🔳 ITU-R BT.601 Grayscale**: High-quality grayscale conversion with a dedicated toggle.
-- **🔆 Brightness & Contrast**: Granular control with real-time sliders and formula feedback.
-- **🔒 Clip-Safe Processing**: Automatically bounds transformed pixel values to the valid `[0,255]` range.
-- **🔪 Edge Detection**: Choose between Canny or Sobel edge detection in real time.
-- **🔍 Side-by-Side Comparison**: Display original and processed images concurrently for instant feedback.
-- **📊 Live Histograms**: Render real-time RGB/grayscale intensity histograms on demand.
-- **💾 Export**: Save your processed output as a standard high-quality image file.
+- ** Universal Image Loading**: Load any RGB or grayscale image using a simple UI.
+- ** ITU-R BT.601 Grayscale**: High-quality grayscale conversion with a dedicated toggle.
+- ** Brightness & Contrast**: Granular control with real-time sliders and formula feedback.
+- ** Clip-Safe Processing**: Automatically bounds transformed pixel values to the valid `[0,255]` range.
+- ** Edge Detection**: Choose between Canny or Sobel edge detection in real time.
+- ** Side-by-Side Comparison**: Display original and processed images concurrently for instant feedback.
+- ** Live Histograms**: Render real-time RGB/grayscale intensity histograms on demand.
+- ** Export**: Save your processed output as a standard high-quality image file.
 
 ---
 
@@ -241,16 +241,16 @@ graph LR
 
 | Control | Purpose | Mathematical Effect / Range |
 |---|---|---|
-| 🔆 **Brightness Slider** | Adds an offset `b` to every pixel | Range: `-100` to `100` |
-| 🌗 **Contrast Slider** | Scales pixel values by `c = 1 + contrast/50` | Range: `-50` to `50` |
-| 🔲 **Grayscale Switch** | Converts RGB to grayscale | Uses `0.299R + 0.587G + 0.114B` |
-| 🔪 **Edge Detection Switch** | Enables edge extraction | Applies post-clip edge masking |
-| ⚙️ **Edge Method Dropdown** | Selects Canny or Sobel | Swaps underlying filter kernel |
-| 📂 **Load Button** | Loads a new image | Supports `PNG`, `JPG`, `TIFF`, `BMP` |
-| 💾 **Save Button** | Saves the processed result | Writes matrix to file |
-| 🔄 **Reset Button** | Resets controls and state | `b=0`, `c=1`, all toggles off |
-| ℹ️ **Status Label** | Displays application state | Event-driven text updates |
-| 🔢 **Formula Label** | Shows active linear transform | Displays active `c` and `b` values |
+|  **Brightness Slider** | Adds an offset `b` to every pixel | Range: `-100` to `100` |
+|  **Contrast Slider** | Scales pixel values by `c = 1 + contrast/50` | Range: `-50` to `50` |
+|  **Grayscale Switch** | Converts RGB to grayscale | Uses `0.299R + 0.587G + 0.114B` |
+|  **Edge Detection Switch** | Enables edge extraction | Applies post-clip edge masking |
+|  **Edge Method Dropdown** | Selects Canny or Sobel | Swaps underlying filter kernel |
+|  **Load Button** | Loads a new image | Supports `PNG`, `JPG`, `TIFF`, `BMP` |
+|  **Save Button** | Saves the processed result | Writes matrix to file |
+|  **Reset Button** | Resets controls and state | `b=0`, `c=1`, all toggles off |
+|  **Status Label** | Displays application state | Event-driven text updates |
+|  **Formula Label** | Shows active linear transform | Displays active `c` and `b` values |
 
 ---
 
