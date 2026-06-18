@@ -1,0 +1,17 @@
+# MATLAB
+*.asv
+*.m~
+*.mlx
+*.mlappinstall
+*.mlappdata
+*.slprj/
+*.mex*
+*.fig
+
+# Backup files
+*~
+*.tmp
+
+# OS files
+.DS_Store
+Thumbs.db

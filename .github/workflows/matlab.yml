@@ -1,0 +1,21 @@
+name: MATLAB CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up MATLAB
+        uses: matlab-actions/setup-matlab@v1
+        with:
+          release: R2024a
+      - name: Run MATLAB tests
+        uses: matlab-actions/run-tests@v1
+        with:
+          testFolder: tests
