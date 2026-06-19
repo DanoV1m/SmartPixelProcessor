@@ -12,10 +12,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Set up MATLAB
-        uses: matlab-actions/setup-matlab@v1
+        uses: matlab-actions/setup-matlab@v3
         with:
           release: R2024a
       - name: Run MATLAB tests
-        uses: matlab-actions/run-tests@v1
+        uses: matlab-actions/run-tests@v3
         with:
-          testFolder: tests
+          select-by-folder: tests
