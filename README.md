@@ -6,12 +6,7 @@
 ![Image Processing](https://img.shields.io/badge/Image_Processing-Toolbox-orange.svg?style=for-the-badge)
 ![App Designer](https://img.shields.io/badge/UI-App_Designer-purple.svg?style=for-the-badge)
 
-> [!NOTE]
-> **הנחיות להוספת תמונות לפרויקט:**
-> 1. צלם מסך של האפליקציה במחשב שלך.
-> 2. שמור את תמונת המסך בנתיב: `docs/assets/hero-screenshot.png`
-> 3. במידה ויש אנימציה (GIF), שמור אותה בנתיב: `docs/assets/usage-animation.gif`
-> 4. לאחר מכן, תוכל למחוק את תיבת ההערה הזו מקובץ ה-`README.md`.
+![SmartPixelProcessor App Interface](docs/assets/hero-screenshot.png)
 
 SmartPixelProcessor is a powerful MATLAB App Designer application for interactive image processing. It features live histogram analysis, ITU-R BT.601 grayscale conversion, brightness and contrast control, clip-safe linear transform, and edge detection using Canny and Sobel algorithms.
 
