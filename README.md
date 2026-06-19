@@ -101,39 +101,50 @@ The image processing engine implements the following mathematical operations:
 
 ### 1. Grayscale Conversion (ITU-R BT.601)
 The app uses the ITU-R BT.601 weighted formula to convert RGB pixel values to grayscale, matching human visual perception of luminance:
+
 $$
-I_{gray} = 0.299 \cdot R + 0.587 \cdot G + 0.114 \cdot B
+I_{\text{gray}} = 0.299 \cdot R + 0.587 \cdot G + 0.114 \cdot B
 $$
+
 *Note: The green channel receives the highest weighting because the human eye is most sensitive to green wavelengths.*
 
 ### 2. Linear Contrast & Brightness Transform
 The linear pixel transform scales and shifts the intensity values:
+
 $$
-I_{out} = c \cdot I_{in} + b
+I_{\text{out}} = c \cdot I_{\text{in}} + b
 $$
+
 Where:
 - $b$ is the brightness offset controlled by the slider (range: $[-100, 100]$).
 - $c$ is the contrast multiplier computed from the slider value:
-  $$
-  c = 1 + \frac{\text{contrast}}{50}
-  $$
+
+$$
+c = 1 + \frac{\text{contrast}}{50}
+$$
 
 ### 3. Clip-Safe Intensity Boundary
 To ensure that computed intensities do not overflow or underflow standard 8-bit image formats, the values are clipped:
+
 $$
-I_{clip} = \min\left(\max\left(I_{out}, 0\right), 255\right)
+I_{\text{clip}} = \min\left(\max\left(I_{\text{out}}, 0\right), 255\right)
 $$
 
 ### 4. Edge Detection & Gradient Math
 - **Canny**: Applies a multi-stage process (Gaussian smoothing, Sobel gradients, non-maximum suppression, and hysteresis thresholding) to yield clean, single-pixel-wide binary edges.
-- **Sobel**: Computes the approximate gradient magnitude using 3x3 convolution kernels:
-  $$
-  \nabla I = \sqrt{G_x^2 + G_y^2}
-  $$
-  Where the derivative filters $G_x$ and $G_y$ are defined as:
-  $$
-  G_x = \begin{bmatrix} -1 & 0 & 1 \\ -2 & 0 & 2 \\ -1 & 0 & 1 \end{bmatrix}, \quad G_y = \begin{bmatrix} -1 & -2 & -1 \\ 0 & 0 & 0 \\ 1 & 2 & 1 \end{bmatrix}
-  $$
+- **Sobel**: Computes the approximate gradient magnitude using 3x3 convolution kernels.
+
+The gradient magnitude is calculated as:
+
+$$
+\nabla I = \sqrt{G_x^2 + G_y^2}
+$$
+
+Where the derivative filters $G_x$ and $G_y$ are defined as:
+
+$$
+G_x = \begin{bmatrix} -1 & 0 & 1 \\ -2 & 0 & 2 \\ -1 & 0 & 1 \end{bmatrix}, \quad G_y = \begin{bmatrix} -1 & -2 & -1 \\ 0 & 0 & 0 \\ 1 & 2 & 1 \end{bmatrix}
+$$
 
 ---
 
