@@ -181,53 +181,57 @@ classDiagram
     }
     AppBase <|-- SmartPixelProcessor
 ```
-
-### Data Flow
+### Unified Architecture & Data Pipeline
 ```mermaid
 flowchart TD
-    Load[Load Image] -->|Read from disk| Original[OriginalImage]
-    Original -->|Optional conversion| Gray{Grayscale toggle}
-    Gray -->|Yes| Conv[Grayscale Conversion]
-    Gray -->|No| Transform[Linear Transform]
-    Conv --> Transform
-    Transform --> Clip[Clip to 0..255]
-    Clip --> Edge{Edge Detection toggle}
-    Edge -->|Yes| EdgeOp["Edge Operator (Canny/Sobel)"]
-    EdgeOp --> Display[Display Processed Image]
-    Edge -->|No| Display
-    Display --> Histogram[Render Histogram]
-```
+    subgraph UI ["User Interface (UI Layout)"]
+        LoadBtn[Load Button]
+        SaveBtn[Save Button]
+        ResetBtn[Reset Button]
+        B_Slider[Brightness Slider]
+        C_Slider[Contrast Slider]
+        G_Switch[Grayscale Switch]
+        E_Switch[Edge Detection Switch]
+        E_Method[Edge Method DropDown]
+        O_Axes[Original Image Axes]
+        P_Axes[Processed Image Axes]
+        H_Axes[Histogram Axes]
+    end
 
-### Processing Pipeline Sequence
-```mermaid
-sequenceDiagram
-    participant User
-    participant Slider
-    participant App
-    participant ProcessedAxes
-    participant HistogramAxes
+    subgraph Pipeline ["Processing Pipeline"]
+        LoadBtn -->|Trigger Click| LoadOp([Load Image from Disk])
+        LoadOp -->|Write Buffer| OriginalImage[(OriginalImage Buffer)]
+        OriginalImage -->|Render| O_Axes
 
-    User->>Slider: adjust brightness/contrast
-    Slider->>App: ValueChangedFcn
-    App->>App: updateImageAndDisplay()
-    App->>ProcessedAxes: show processed output
-    App->>HistogramAxes: update histogram
-```
-
-### Callback Dependency Graph
-```mermaid
-graph LR
-    LoadButton --> App[SmartPixelProcessor]
-    App --> updateImageAndDisplay
-    ContrastSlider --> onParameterChanged
-    BrightnessSlider --> onParameterChanged
-    GrayscaleSwitch --> onParameterChanged
-    EdgeDetectionSwitch --> onParameterChanged
-    EdgeMethodDropDown --> onParameterChanged
-    onParameterChanged --> updateImageAndDisplay
-    updateImageAndDisplay --> updateHistogram
-    SaveButton --> onSaveButtonPushed
-    ResetButton --> onResetButtonPushed
+        OriginalImage -->|Process Step 1| GrayCheck{Grayscale Active?}
+        G_Switch -->|Toggle State| GrayCheck
+        
+        GrayCheck -->|Yes| GrayConv[ITU-R BT.601 Grayscale Conversion]
+        GrayCheck -->|No| LinearTrans[Linear Transform: c*I + b]
+        GrayConv --> LinearTrans
+        
+        B_Slider & C_Slider -->|Value Changes| LinearTrans
+        
+        LinearTrans --> Clip[Clipping to 0..255]
+        Clip --> EdgeCheck{Edge Switch Active?}
+        E_Switch & E_Method -->|Toggle State / Method| EdgeCheck
+        
+        EdgeCheck -->|Yes| EdgeOp[Edge Operator: Canny / Sobel]
+        EdgeCheck -->|No| DisplayOp([Display Processed Image])
+        
+        EdgeOp --> DisplayOp
+        DisplayOp -->|Write Buffer| ProcessedImage[(ProcessedImage Buffer)]
+        ProcessedImage -->|Render| P_Axes
+        
+        ProcessedImage -->|Calculate| HistOp[Update Histogram]
+        HistOp -->|Render| H_Axes
+        
+        SaveBtn -->|Trigger Click| SaveOp([Save Processed Image to Disk])
+        ProcessedImage --> SaveOp
+        
+        ResetBtn -->|Trigger Click| ResetOp([Reset Parameters to Default])
+        ResetOp -->|Reset UI State| B_Slider & C_Slider & G_Switch & E_Switch
+    end
 ```
 
 ### Memory & Performance Management
