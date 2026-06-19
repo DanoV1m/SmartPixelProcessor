@@ -7,9 +7,25 @@
 ![App Designer](https://img.shields.io/badge/UI-App_Designer-purple.svg?style=for-the-badge)
 
 > [!NOTE]
-> *הערה: כדי לראות תמונות אמיתיות של האפליקציה בגיטהאב, עליך לצלם מסך של התוכנה שלך ולשמור את התמונות בתיקייה `docs/assets/` תחת השמות `hero-screenshot.png` ו-`usage-animation.gif`, ולאחר מכן להסיר הערה זו.*
+> **הנחיות להוספת תמונות לפרויקט:**
+> 1. צלם מסך של האפליקציה במחשב שלך.
+> 2. שמור את תמונת המסך בנתיב: `docs/assets/hero-screenshot.png`
+> 3. במידה ויש אנימציה (GIF), שמור אותה בנתיב: `docs/assets/usage-animation.gif`
+> 4. לאחר מכן, תוכל למחוק את תיבת ההערה הזו מקובץ ה-`README.md`.
 
 SmartPixelProcessor is a powerful MATLAB App Designer application for interactive image processing. It features live histogram analysis, ITU-R BT.601 grayscale conversion, brightness and contrast control, clip-safe linear transform, and edge detection using Canny and Sobel algorithms.
+
+---
+
+## 📖 Table of Contents
+- [✨ Features](#-features)
+- [🚀 How to Run](#-how-to-run)
+- [🎮 User Guide](#-user-guide)
+- [🧮 Mathematical Foundations & Algorithms](#-mathematical-foundations--algorithms)
+- [🏗️ Architecture & Design](#️-architecture--design)
+- [🎛️ Controls Reference](#️-controls-reference)
+- [💻 Tech Stack](#-tech-stack)
+- [📂 Repository Contents](#-repository-contents)
 
 ---
 
@@ -23,56 +39,6 @@ SmartPixelProcessor is a powerful MATLAB App Designer application for interactiv
 - **🔍 Side-by-Side Comparison**: Display original and processed images concurrently for instant feedback.
 - **📊 Live Histograms**: Render real-time RGB/grayscale intensity histograms on demand.
 - **💾 Export**: Save your processed output as a standard high-quality image file.
-
----
-
-## 🧮 Mathematical Foundations
-
-The core image processing relies on fundamental mathematical transformations:
-
-### 1. Grayscale Conversion (ITU-R BT.601)
-$$ Y = 0.299 \cdot R + 0.587 \cdot G + 0.114 \cdot B $$
-
-### 2. Linear Contrast and Brightness Transform
-For a given pixel intensity $I$, the new intensity $I'$ is calculated as:
-$$ I' = c \cdot I + b $$
-Where $c$ is the contrast multiplier and $b$ is the brightness offset.
-
-### 3. Clipping Function
-To ensure valid 8-bit image data:
-$$ I_{final} = \max(0, \min(255, I')) $$
-
----
-
-## 🏗️ Architecture
-
-```mermaid
-flowchart TD
-    A([Load Image]) --> B{Grayscale?}
-    B -- Yes --> C[Grayscale Conversion]
-    B -- No --> C[Skip Conversion]
-    C --> D[Linear Transform]
-    D --> E[Clipping 0..255]
-    E --> F{Edge Detection?}
-    F -- Yes --> G["Edge Detection (Canny / Sobel)"]
-    F -- No --> H[Display Processed]
-    G --> H
-    H --> I[Update Histogram]
-```
-
-```mermaid
-flowchart LR
-    UI[UI Layout] --> O[Original Image UIAxes]
-    UI --> P[Processed Image UIAxes]
-    UI --> H[Histogram UIAxes]
-    UI --> S[BrightnessSlider]
-    UI --> C[ContrastSlider]
-    UI --> G[GrayscaleSwitch]
-    UI --> E[EdgeDetectionSwitch]
-    UI --> M[EdgeMethodDropDown]
-    UI --> B[Load/Save/Reset Buttons]
-    UI --> L[StatusLabel + FormulaLabel]
-```
 
 ---
 
@@ -94,14 +60,180 @@ app = SmartPixelProcessor;
 
 ---
 
-## 🎮 Usage
+## 🎮 User Guide
 
-1. Click **Load** and select an image from your computer.
-2. Adjust the **Brightness** and **Contrast** sliders to see real-time updates.
-3. Toggle **Grayscale** and **Edge Detection** to apply filters.
-4. Use the **Edge Method** dropdown to seamlessly switch between **Canny** and **Sobel** algorithms.
-5. Save your masterpiece using the **Save** button.
-6. Hit **Reset** anytime to restore the image to its original state.
+### Getting Started
+1. Open MATLAB and navigate to the project directory.
+2. Launch the application (see [How to Run](#-how-to-run)).
+3. The app window will open displaying three main panels:
+   - **Original Image** (left panel)
+   - **Processed Image** (center panel)
+   - **Histogram** (right panel)
+
+### Load an Image
+- Click the **Load** button.
+- Select any supported image file (`PNG`, `JPG`, `TIFF`, or `BMP`).
+- The original image appears in the left panel, and the processed image and histogram will update automatically.
+
+### Adjusting Controls
+- **Brightness**: Drag the slider to add an offset to each pixel. Move right to brighten, left to darken.
+- **Contrast**: Drag the slider to scale the intensity range.
+- **Grayscale**: Toggle the switch to convert RGB channels to grayscale.
+- **Edge Detection**: Toggle on to view the extracted edges of the image as a binary map.
+- **Edge Method**: Swap between **Canny** (for cleaner, noise-resistant edges) and **Sobel** (for simple gradient boundaries).
+
+### Histogram Interpretation
+- The live histogram plots pixel counts against intensity levels.
+- For grayscale images, it shows the distribution of a single channel.
+- For color images, it plots the distribution of the active processed output.
+- **Narrow peaks** indicate low contrast (limited tonal range).
+- **Wide spreads** represent high contrast.
+- **Spikes at the edges** (0 or 255) indicate clipping in shadows or highlights.
+
+### Saving Results & Resetting
+- **Save**: Click **Save** to write the current processed image to disk.
+- **Reset**: Click **Reset** to return all sliders to zero and disable active switches.
+
+### Tips & Tricks
+- When dealing with low-contrast images, convert to **Grayscale** and increase the **Contrast** slightly before enabling **Edge Detection** to get cleaner outlines.
+- If the output is too dark, increase the **Brightness** slider first before applying **Contrast**.
+
+---
+
+## 🧮 Mathematical Foundations & Algorithms
+
+The image processing engine implements the following mathematical operations:
+
+### 1. Grayscale Conversion (ITU-R BT.601)
+The app uses the ITU-R BT.601 weighted formula to convert RGB pixel values to grayscale, matching human visual perception of luminance:
+$$
+I_{gray} = 0.299 \cdot R + 0.587 \cdot G + 0.114 \cdot B
+$$
+*Note: The green channel receives the highest weighting because the human eye is most sensitive to green wavelengths.*
+
+### 2. Linear Contrast & Brightness Transform
+The linear pixel transform scales and shifts the intensity values:
+$$
+I_{out} = c \cdot I_{in} + b
+$$
+Where:
+- $b$ is the brightness offset controlled by the slider (range: $[-100, 100]$).
+- $c$ is the contrast multiplier computed from the slider value:
+  $$
+  c = 1 + \frac{\text{contrast}}{50}
+  $$
+
+### 3. Clip-Safe Intensity Boundary
+To ensure that computed intensities do not overflow or underflow standard 8-bit image formats, the values are clipped:
+$$
+I_{clip} = \min\left(\max\left(I_{out}, 0\right), 255\right)
+$$
+
+### 4. Edge Detection & Gradient Math
+- **Canny**: Applies a multi-stage process (Gaussian smoothing, Sobel gradients, non-maximum suppression, and hysteresis thresholding) to yield clean, single-pixel-wide binary edges.
+- **Sobel**: Computes the approximate gradient magnitude using 3x3 convolution kernels:
+  $$
+  \nabla I = \sqrt{G_x^2 + G_y^2}
+  $$
+  Where the derivative filters $G_x$ and $G_y$ are defined as:
+  $$
+  G_x = \begin{bmatrix} -1 & 0 & 1 \\ -2 & 0 & 2 \\ -1 & 0 & 1 \end{bmatrix}, \quad G_y = \begin{bmatrix} -1 & -2 & -1 \\ 0 & 0 & 0 \\ 1 & 2 & 1 \end{bmatrix}
+  $$
+
+---
+
+## 🏗️ Architecture & Design
+
+### Class Hierarchy
+```mermaid
+classDiagram
+    class AppBase
+    class SmartPixelProcessor {
+        +OriginalImage
+        +ProcessedImage
+        +UIFigure
+        +OriginalImageAxes
+        +ProcessedImageAxes
+        +HistogramAxes
+        +BrightnessSlider
+        +ContrastSlider
+        +GrayscaleSwitch
+        +EdgeDetectionSwitch
+        +EdgeMethodDropDown
+        +LoadButton
+        +SaveButton
+        +ResetButton
+        +StatusLabel
+        +FormulaLabel
+        +processImage(inputImage)
+        -startupFcn()
+        -updateImageAndDisplay()
+        -convertToGrayscale()
+        -applyLinearTransform()
+        -clipImage()
+        -detectEdges()
+        -updateHistogram()
+        -setFormula()
+        -onParameterChanged()
+        -onLoadButtonPushed()
+        -onSaveButtonPushed()
+        -onResetButtonPushed()
+    }
+    AppBase <|-- SmartPixelProcessor
+```
+
+### Data Flow
+```mermaid
+flowchart TD
+    Load[Load Image] -->|Read from disk| Original[OriginalImage]
+    Original -->|Optional conversion| Gray{Grayscale toggle}
+    Gray -->|Yes| Conv[Grayscale Conversion]
+    Gray -->|No| Transform[Linear Transform]
+    Conv --> Transform
+    Transform --> Clip[Clip to 0..255]
+    Clip --> Edge{Edge Detection toggle}
+    Edge -->|Yes| EdgeOp["Edge Operator (Canny/Sobel)"]
+    EdgeOp --> Display[Display Processed Image]
+    Edge -->|No| Display
+    Display --> Histogram[Render Histogram]
+```
+
+### Processing Pipeline Sequence
+```mermaid
+sequenceDiagram
+    participant User
+    participant Slider
+    participant App
+    participant ProcessedAxes
+    participant HistogramAxes
+
+    User->>Slider: adjust brightness/contrast
+    Slider->>App: ValueChangedFcn
+    App->>App: updateImageAndDisplay()
+    App->>ProcessedAxes: show processed output
+    App->>HistogramAxes: update histogram
+```
+
+### Callback Dependency Graph
+```mermaid
+graph LR
+    LoadButton --> App[SmartPixelProcessor]
+    App --> updateImageAndDisplay
+    ContrastSlider --> onParameterChanged
+    BrightnessSlider --> onParameterChanged
+    GrayscaleSwitch --> onParameterChanged
+    EdgeDetectionSwitch --> onParameterChanged
+    EdgeMethodDropDown --> onParameterChanged
+    onParameterChanged --> updateImageAndDisplay
+    updateImageAndDisplay --> updateHistogram
+    SaveButton --> onSaveButtonPushed
+    ResetButton --> onResetButtonPushed
+```
+
+### Memory & Performance Management
+- **Buffers**: The app maintains exactly two persistent image matrices in memory: `OriginalImage` and `ProcessedImage` to minimize footprint.
+- **On-Demand Transforms**: All operations are executed sequentially on demand to avoid spawning large temporary arrays.
+- **DataType Consistency**: The `clipImage` function casts computed doubles back to `uint8` matrices to keep data structures compact.
 
 ---
 
@@ -135,7 +267,7 @@ app = SmartPixelProcessor;
 
 - `SmartPixelProcessor.m` — Main App Designer application class code
 - `SmartPixelProcessor.mlapp` — App Designer binary application file
-- `docs/` — Architecture diagrams, user guide, and algorithmic notes
+- `docs/` — Folder containing screenshots and assets (excluding redundant markdown files)
 - `tests/test_SmartPixelProcessor.m` — Comprehensive MATLAB unit tests
 - `examples/demo_script.m` — Headless programmatic demonstration script
 - `.github/workflows/matlab.yml` — CI pipeline configuration
