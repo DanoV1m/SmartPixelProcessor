@@ -2,7 +2,12 @@ classdef test_SmartPixelProcessor < matlab.unittest.TestCase
     methods (TestClassSetup)
         function addSrcToPath(testCase)
             % Add src folder to the MATLAB path so the app can be resolved
-            addpath(fullfile(fileparts(mfilename('fullpath')), '../src'));
+            classPath = which(class(testCase));
+            if ~isempty(classPath)
+                addpath(fullfile(fileparts(classPath), '../src'));
+            else
+                addpath('src');
+            end
         end
     end
 
