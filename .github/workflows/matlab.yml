@@ -15,8 +15,10 @@ jobs:
         uses: matlab-actions/setup-matlab@v3
         with:
           release: R2024a
-      - name: Start virtual display server (Xvfb)
-        uses: coactions/setup-xvfb@v1
+      - name: Start Xvfb (Virtual Display)
+        run: |
+          Xvfb :99 -screen 0 1280x1024x24 &
+          echo "DISPLAY=:99" >> $GITHUB_ENV
       - name: Run MATLAB tests
         uses: matlab-actions/run-tests@v3
         with:
