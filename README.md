@@ -1,25 +1,50 @@
-# SmartPixelProcessor
+# 🎨 SmartPixelProcessor 📸
 
-![MATLAB](https://img.shields.io/badge/MATLAB-R2024a-blue.svg)
-![License](https://img.shields.io/badge/License-MIT-green.svg)
-![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
+![MATLAB](https://img.shields.io/badge/MATLAB-R2024a-blue.svg?style=for-the-badge&logo=mathworks)
+![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)
+![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge)
+![Image Processing](https://img.shields.io/badge/Image_Processing-Toolbox-orange.svg?style=for-the-badge)
+![App Designer](https://img.shields.io/badge/UI-App_Designer-purple.svg?style=for-the-badge)
 
-![Hero screenshot placeholder](docs/assets/hero-screenshot.png)
+> [!NOTE]
+> *הערה: כדי לראות תמונות אמיתיות של האפליקציה בגיטהאב, עליך לצלם מסך של התוכנה שלך ולשמור את התמונות בתיקייה `docs/assets/` תחת השמות `hero-screenshot.png` ו-`usage-animation.gif`, ולאחר מכן להסיר הערה זו.*
 
-SmartPixelProcessor is a MATLAB App Designer application for interactive image processing with live histogram analysis, ITU-R BT.601 grayscale conversion, brightness and contrast control, clip-safe linear transform, and edge detection using Canny and Sobel.
+SmartPixelProcessor is a powerful MATLAB App Designer application for interactive image processing. It features live histogram analysis, ITU-R BT.601 grayscale conversion, brightness and contrast control, clip-safe linear transform, and edge detection using Canny and Sobel algorithms.
 
-## Features
+---
 
-- Load any RGB or grayscale image using a simple UI
-- Apply ITU-R BT.601 grayscale conversion with a dedicated toggle
-- Control brightness and contrast with sliders and formula feedback
-- Clip transformed pixel values to the valid `[0,255]` range
-- Choose Canny or Sobel edge detection in real time
-- Display original and processed images side-by-side
-- Render live RGB/grayscale intensity histogram on demand
-- Save processed output as a standard image file
+## ✨ Features
 
-## Architecture
+- **🖼️ Universal Image Loading**: Load any RGB or grayscale image using a simple UI.
+- **🔳 ITU-R BT.601 Grayscale**: High-quality grayscale conversion with a dedicated toggle.
+- **🔆 Brightness & Contrast**: Granular control with real-time sliders and formula feedback.
+- **🔒 Clip-Safe Processing**: Automatically bounds transformed pixel values to the valid `[0,255]` range.
+- **🔪 Edge Detection**: Choose between Canny or Sobel edge detection in real time.
+- **🔍 Side-by-Side Comparison**: Display original and processed images concurrently for instant feedback.
+- **📊 Live Histograms**: Render real-time RGB/grayscale intensity histograms on demand.
+- **💾 Export**: Save your processed output as a standard high-quality image file.
+
+---
+
+## 🧮 Mathematical Foundations
+
+The core image processing relies on fundamental mathematical transformations:
+
+### 1. Grayscale Conversion (ITU-R BT.601)
+$$ Y = 0.299 \cdot R + 0.587 \cdot G + 0.114 \cdot B $$
+
+### 2. Linear Contrast and Brightness Transform
+For a given pixel intensity $I$, the new intensity $I'$ is calculated as:
+$$ I' = c \cdot I + b $$
+Where $c$ is the contrast multiplier and $b$ is the brightness offset.
+
+### 3. Clipping Function
+To ensure valid 8-bit image data:
+$$ I_{final} = \max(0, \min(255, I')) $$
+
+---
+
+## 🏗️ Architecture
 
 ```mermaid
 flowchart TD
@@ -49,71 +74,71 @@ flowchart LR
     UI --> L[StatusLabel + FormulaLabel]
 ```
 
-## How to Run
+---
 
-Recommended:
+## 🚀 How to Run
 
+### Recommended Method:
 1. Open MATLAB.
 2. Double-click `SmartPixelProcessor.mlapp` in the Current Folder browser.
-3. Or run the app from the Command Window:
-
+3. Or run the app directly from the Command Window:
 ```matlab
 SmartPixelProcessor
 ```
 
-Alternative:
-
-- Run directly from the class:
-
+### Alternative Method (Class-based):
+Run directly from the instantiated class:
 ```matlab
 app = SmartPixelProcessor;
 ```
 
-## Usage
+---
 
-![Usage GIF placeholder](docs/assets/usage-animation.gif)
+## 🎮 Usage
 
-1. Click **Load** and select an image.
-2. Adjust **Brightness** and **Contrast** sliders.
-3. Toggle **Grayscale** and **Edge Detection**.
-4. Use the **Edge Method** dropdown to choose between **Canny** and **Sobel**.
-5. Save your processed image with **Save**.
-6. Reset the app with **Reset** if you want to start over.
+1. Click **Load** and select an image from your computer.
+2. Adjust the **Brightness** and **Contrast** sliders to see real-time updates.
+3. Toggle **Grayscale** and **Edge Detection** to apply filters.
+4. Use the **Edge Method** dropdown to seamlessly switch between **Canny** and **Sobel** algorithms.
+5. Save your masterpiece using the **Save** button.
+6. Hit **Reset** anytime to restore the image to its original state.
 
-## Controls Reference
+---
 
-| Control | Purpose | Notes |
+## 🎛️ Controls Reference
+
+| Control | Purpose | Mathematical Effect / Range |
 |---|---|---|
-| Brightness Slider | Adds an offset `b` to every pixel | Range: `-100` to `100` |
-| Contrast Slider | Scales pixel values by `c = 1 + contrast/50` | Range: `-50` to `50` |
-| Grayscale Switch | Converts RGB to grayscale using ITU-R BT.601 weights | Uses `0.299R + 0.587G + 0.114B` |
-| Edge Detection Switch | Enables edge extraction | Applies selected method after clip step |
-| Edge Method Dropdown | Selects Canny or Sobel | Changes edge filter method |
-| Load Button | Loads a new image | Supports PNG, JPG, TIFF, BMP |
-| Save Button | Saves the processed result | Saves current processed image |
-| Reset Button | Resets controls and state | Returns sliders to `0` and toggles off |
-| Status Label | Displays application state | Updates after each action |
-| Formula Label | Shows the active linear transform | Updates with `c` and `b` values |
+| 🔆 **Brightness Slider** | Adds an offset `b` to every pixel | Range: `-100` to `100` |
+| 🌗 **Contrast Slider** | Scales pixel values by `c = 1 + contrast/50` | Range: `-50` to `50` |
+| 🔲 **Grayscale Switch** | Converts RGB to grayscale | Uses `0.299R + 0.587G + 0.114B` |
+| 🔪 **Edge Detection Switch** | Enables edge extraction | Applies post-clip edge masking |
+| ⚙️ **Edge Method Dropdown** | Selects Canny or Sobel | Swaps underlying filter kernel |
+| 📂 **Load Button** | Loads a new image | Supports `PNG`, `JPG`, `TIFF`, `BMP` |
+| 💾 **Save Button** | Saves the processed result | Writes matrix to file |
+| 🔄 **Reset Button** | Resets controls and state | `b=0`, `c=1`, all toggles off |
+| ℹ️ **Status Label** | Displays application state | Event-driven text updates |
+| 🔢 **Formula Label** | Shows active linear transform | Displays active `c` and `b` values |
 
-## Tech Stack
+---
 
-- MATLAB App Designer / `matlab.apps.AppBase`
-- Core MATLAB Image Processing Toolbox functions
-- `edge`, `rgb2gray`, `im2uint8`, `imshow`, `histogram`
-- GitHub Actions for CI
+## 💻 Tech Stack
 
-## Notes
+- **MATLAB App Designer** / `matlab.apps.AppBase`
+- **Core MATLAB Image Processing Toolbox** functions
+- Built-in algorithms: `edge`, `rgb2gray`, `im2uint8`, `imshow`, `histogram`
+- **GitHub Actions** for Continuous Integration (CI)
 
-- `SmartPixelProcessor.m` is the class-based MATLAB source implementation.
-- `SmartPixelProcessor.mlapp` is the App Designer binary application file.
+---
 
-## Repository Contents
+## 📂 Repository Contents
 
-- `SmartPixelProcessor.m` — main App Designer application class
-- `docs/` — architecture, user guide, algorithm notes
-- `tests/test_SmartPixelProcessor.m` — MATLAB unit tests
-- `examples/demo_script.m` — headless programmatic demo
-- `.github/workflows/matlab.yml` — CI pipeline
-- `CONTRIBUTING.md` — contribution guidelines
-- `LICENSE` — MIT license
-- `.gitignore` — MATLAB ignore patterns
+- `SmartPixelProcessor.m` — Main App Designer application class code
+- `SmartPixelProcessor.mlapp` — App Designer binary application file
+- `docs/` — Architecture diagrams, user guide, and algorithmic notes
+- `tests/test_SmartPixelProcessor.m` — Comprehensive MATLAB unit tests
+- `examples/demo_script.m` — Headless programmatic demonstration script
+- `.github/workflows/matlab.yml` — CI pipeline configuration
+- `CONTRIBUTING.md` — Guidelines for community contributions
+- `LICENSE` — MIT license details
+- `.gitignore` — Standard MATLAB ignore patterns
