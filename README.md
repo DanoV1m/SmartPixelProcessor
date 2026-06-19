@@ -29,7 +29,7 @@ flowchart TD
     C --> D[Linear Transform]
     D --> E[Clipping 0..255]
     E --> F{Edge Detection?}
-    F -- Yes --> G[Edge Detection (Canny / Sobel)]
+    F -- Yes --> G["Edge Detection (Canny / Sobel)"]
     F -- No --> H[Display Processed]
     G --> H
     H --> I[Update Histogram]
