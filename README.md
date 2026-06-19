@@ -275,9 +275,8 @@ flowchart TD
 
 ## 📂 Repository Contents
 
-- `SmartPixelProcessor.m` — Main App Designer application class code
-- `SmartPixelProcessor.mlapp` — App Designer binary application file
-- `docs/` — Folder containing screenshots and assets (excluding redundant markdown files)
+- `src/` — Folder containing main App Designer application source files (`SmartPixelProcessor.m` and `SmartPixelProcessor.mlapp`)
+- `docs/` — Folder containing screenshots and assets
 - `tests/test_SmartPixelProcessor.m` — Comprehensive MATLAB unit tests
 - `examples/demo_script.m` — Headless programmatic demonstration script
 - `.github/workflows/matlab.yml` — CI pipeline configuration

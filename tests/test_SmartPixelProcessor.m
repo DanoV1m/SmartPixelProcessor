@@ -1,4 +1,11 @@
 classdef test_SmartPixelProcessor < matlab.unittest.TestCase
+    methods (TestClassSetup)
+        function addSrcToPath(testCase)
+            % Add src folder to the MATLAB path so the app can be resolved
+            addpath(fullfile(fileparts(mfilename('fullpath')), '../src'));
+        end
+    end
+
     methods (Test)
         function testGrayscaleConversion(testCase)
             app = SmartPixelProcessor;
