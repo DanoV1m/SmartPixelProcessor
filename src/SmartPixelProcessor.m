@@ -117,9 +117,12 @@ classdef SmartPixelProcessor < matlab.apps.AppBase
         function createComponents(app)
             app.UIFigure = uifigure('Name', 'SmartPixelProcessor', 'Position', [100, 100, 1250, 720]);
 
-            app.OriginalImageAxes = uiaxes(app.UIFigure, 'Position', [25, 360, 380, 340], 'Title', 'Original Image');
-            app.ProcessedImageAxes = uiaxes(app.UIFigure, 'Position', [420, 360, 380, 340], 'Title', 'Processed Image');
-            app.HistogramAxes = uiaxes(app.UIFigure, 'Position', [815, 360, 380, 340], 'Title', 'Histogram');
+            app.OriginalImageAxes = uiaxes(app.UIFigure, 'Position', [25, 360, 380, 340]);
+            title(app.OriginalImageAxes, 'Original Image');
+            app.ProcessedImageAxes = uiaxes(app.UIFigure, 'Position', [420, 360, 380, 340]);
+            title(app.ProcessedImageAxes, 'Processed Image');
+            app.HistogramAxes = uiaxes(app.UIFigure, 'Position', [815, 360, 380, 340]);
+            title(app.HistogramAxes, 'Histogram');
 
             app.BrightnessSlider = uislider(app.UIFigure, ...
                 'Position', [165, 300, 520, 3], ...
@@ -134,11 +137,11 @@ classdef SmartPixelProcessor < matlab.apps.AppBase
             uilabel(app.UIFigure, 'Position', [25, 235, 120, 22], 'Text', 'Contrast');
 
             app.GrayscaleSwitch = uiswitch(app.UIFigure, 'toggle', ...
-                'Position', [165, 200, 45, 20], 'ValueChangedFcn', @(src, event) app.onParameterChanged());
+                'Position', [165, 200, 45, 20], 'Value', 'Off', 'ValueChangedFcn', @(src, event) app.onParameterChanged());
             uilabel(app.UIFigure, 'Position', [25, 200, 120, 22], 'Text', 'Grayscale');
 
             app.EdgeDetectionSwitch = uiswitch(app.UIFigure, 'toggle', ...
-                'Position', [165, 160, 45, 20], 'ValueChangedFcn', @(src, event) app.onParameterChanged());
+                'Position', [165, 160, 45, 20], 'Value', 'Off', 'ValueChangedFcn', @(src, event) app.onParameterChanged());
             uilabel(app.UIFigure, 'Position', [25, 160, 140, 22], 'Text', 'Edge Detection');
 
             app.EdgeMethodDropDown = uidropdown(app.UIFigure, ...
