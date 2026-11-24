@@ -40,17 +40,18 @@ SmartPixelProcessor is a powerful MATLAB App Designer application for interactiv
 ## 🚀 How to Run
 
 ### Recommended Method:
-1. Open MATLAB.
-2. Double-click `SmartPixelProcessor.mlapp` in the Current Folder browser.
-3. Or run the app directly from the Command Window:
+1. Open MATLAB at the repository root.
+2. Run the maintained class implementation:
 ```matlab
-SmartPixelProcessor
+addpath('src');
+app = SmartPixelProcessorApp();
 ```
+The maintained class is named `SmartPixelProcessorApp` to avoid MATLAB resolving the same-named legacy `.mlapp` instead. The original `.mlapp` is retained as a historical App Designer artifact and has not been synchronized with this class.
 
 ### Alternative Method (Class-based):
 Run directly from the instantiated class:
 ```matlab
-app = SmartPixelProcessor;
+app = SmartPixelProcessorApp();
 ```
 
 ---
@@ -283,3 +284,12 @@ flowchart TD
 - `CONTRIBUTING.md` — Guidelines for community contributions
 - `LICENSE` — MIT license details
 - `.gitignore` — Standard MATLAB ignore patterns
+
+## Validation
+Run `addpath('src'); runtests('tests')` in MATLAB R2024a with Image Processing Toolbox. The proposed class changes require MATLAB execution before release.
+
+### Spatial filters
+The maintained app supports Gaussian smoothing (sigma 1), 3-by-3 median filtering and unsharp masking. Filters run after intensity clipping and before optional edge detection. `pixelFilter` and `pixelSpectrum` are callable independently of the UI. The legacy App Designer file is not synchronized.
+
+### Frequency analysis and similarity metrics
+The analysis selector switches between histogram and centered log-magnitude FFT. PSNR and mean per-channel SSIM compare same-size uint8 images against the loaded original; they are similarity measures, not proof that filtering improves quality. Grayscale conversion of RGB or edge extraction changing dimensions makes the direct comparison unavailable.
