@@ -11,8 +11,8 @@ classdef SmartPixelProcessor < matlab.apps.AppBase
         HistogramAxes matlab.ui.control.UIAxes
         BrightnessSlider matlab.ui.control.Slider
         ContrastSlider matlab.ui.control.Slider
-        GrayscaleSwitch matlab.ui.control.Switch
-        EdgeDetectionSwitch matlab.ui.control.Switch
+        GrayscaleSwitch matlab.ui.control.ToggleSwitch
+        EdgeDetectionSwitch matlab.ui.control.ToggleSwitch
         EdgeMethodDropDown matlab.ui.control.DropDown
         LoadButton matlab.ui.control.Button
         SaveButton matlab.ui.control.Button
