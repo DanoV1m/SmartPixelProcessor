@@ -41,19 +41,7 @@ classdef SmartPixelProcessor < matlab.apps.AppBase
                 return;
             end
 
-            image = app.OriginalImage;
-            if app.GrayscaleSwitch.Value
-                image = app.convertToGrayscale(image);
-            end
-
-            image = app.applyLinearTransform(image);
-            image = app.clipImage(image);
-
-            if app.EdgeDetectionSwitch.Value
-                image = app.detectEdges(image);
-            end
-
-            app.ProcessedImage = image;
+            app.ProcessedImage = app.processImage(app.OriginalImage);
 
             imshow(app.OriginalImage, 'Parent', app.OriginalImageAxes);
             app.OriginalImageAxes.Visible = 'off';
@@ -101,14 +89,14 @@ classdef SmartPixelProcessor < matlab.apps.AppBase
             else
                 edges = edge(image, 'Sobel');
             end
-            edgeImage = uint8(edges) * 255;
+            edgeImage = uint8(edges) .* uint8(255);
         end
 
         function updateHistogram(app, image)
             if isempty(image)
                 return;
             end
-            histogram(app.HistogramAxes, image(:), 0:255, ...
+            histogram(app.HistogramAxes, image(:), -0.5:255.5, ...
                 'FaceColor', [0.2, 0.6, 0.9], 'EdgeColor', 'none');
             app.HistogramAxes.XLim = [0, 255];
             app.HistogramAxes.Title.String = 'Intensity Distribution';
@@ -210,8 +198,8 @@ classdef SmartPixelProcessor < matlab.apps.AppBase
         function onResetButtonPushed(app)
             app.BrightnessSlider.Value = 0;
             app.ContrastSlider.Value = 0;
-            app.GrayscaleSwitch.Value = false;
-            app.EdgeDetectionSwitch.Value = false;
+            app.GrayscaleSwitch.Value = 'Off';
+            app.EdgeDetectionSwitch.Value = 'Off';
             app.EdgeMethodDropDown.Value = 'Canny';
             app.setFormula();
             app.updateImageAndDisplay();
@@ -220,6 +208,22 @@ classdef SmartPixelProcessor < matlab.apps.AppBase
     end
 
     methods (Access = public)
+        function app = SmartPixelProcessor()
+            app.createComponents();
+            registerApp(app, app.UIFigure);
+            runStartupFcn(app, @startupFcn);
+        end
+
+        function delete(app)
+            if ~isempty(app.UIFigure) && isvalid(app.UIFigure)
+                delete(app.UIFigure);
+            end
+        end
+
+        function resetControls(app)
+            app.onResetButtonPushed();
+        end
+
         function outputImage = processImage(app, inputImage)
             if nargin < 2 || isempty(inputImage)
                 inputImage = app.OriginalImage;
@@ -229,12 +233,12 @@ classdef SmartPixelProcessor < matlab.apps.AppBase
                 return;
             end
             image = inputImage;
-            if app.GrayscaleSwitch.Value
+            if strcmp(app.GrayscaleSwitch.Value, 'On')
                 image = app.convertToGrayscale(image);
             end
             image = app.applyLinearTransform(image);
             image = app.clipImage(image);
-            if app.EdgeDetectionSwitch.Value
+            if strcmp(app.EdgeDetectionSwitch.Value, 'On')
                 image = app.detectEdges(image);
             end
             outputImage = image;

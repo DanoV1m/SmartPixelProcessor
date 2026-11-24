@@ -40,12 +40,13 @@ SmartPixelProcessor is a powerful MATLAB App Designer application for interactiv
 ## 🚀 How to Run
 
 ### Recommended Method:
-1. Open MATLAB.
-2. Double-click `SmartPixelProcessor.mlapp` in the Current Folder browser.
-3. Or run the app directly from the Command Window:
+1. Open MATLAB at the repository root.
+2. Run the maintained class implementation:
 ```matlab
-SmartPixelProcessor
+addpath('src');
+app = SmartPixelProcessor();
 ```
+The original `.mlapp` is retained as a historical App Designer artifact and has not been synchronized with this class.
 
 ### Alternative Method (Class-based):
 Run directly from the instantiated class:
@@ -283,3 +284,6 @@ flowchart TD
 - `CONTRIBUTING.md` — Guidelines for community contributions
 - `LICENSE` — MIT license details
 - `.gitignore` — Standard MATLAB ignore patterns
+
+## Validation
+Run `addpath('src'); runtests('tests')` in MATLAB R2024a with Image Processing Toolbox. The proposed class changes require MATLAB execution before release.

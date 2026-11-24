@@ -2,7 +2,7 @@ name: MATLAB CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, 'upgrade/**' ]
   pull_request:
     branches: [ main ]
 
@@ -15,6 +15,7 @@ jobs:
         uses: matlab-actions/setup-matlab@v3
         with:
           release: R2024a
+          products: Image_Processing_Toolbox
       - name: Start Xvfb (Virtual Display)
         run: |
           /usr/bin/Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
