@@ -12,6 +12,25 @@ classdef test_SmartPixelProcessor < matlab.unittest.TestCase
     end
 
     methods (Test)
+        function testFileRoundTripAndAnalysis(testCase)
+            app=SmartPixelProcessorApp;
+            testCase.addTeardown(@() delete(app));
+            folder=tempname; mkdir(folder);
+            testCase.addTeardown(@() rmdir(folder,'s'));
+            image=uint8(reshape(0:255,16,16));
+            input=fullfile(folder,'input.png'); output=fullfile(folder,'output.png');
+            imwrite(image,input);
+            app.loadImageFile(input);
+            app.saveImageFile(output);
+            testCase.verifyEqual(imread(output),image);
+            app.AnalysisDropDown.Value='FFT';
+            app.loadImageFile(input);
+            testCase.verifyTrue(contains(app.HistogramAxes.Title.String,'FFT'));
+            app.resetControls();
+            testCase.verifyEqual(app.AnalysisDropDown.Value,'Histogram');
+            testCase.verifyTrue(contains(app.QualityLabel.Text,'SSIM'));
+        end
+
         function testGrayscaleConversion(testCase)
             app = SmartPixelProcessorApp;
             testCase.addTeardown(@() delete(app));

@@ -211,17 +211,11 @@ classdef SmartPixelProcessorApp < matlab.apps.AppBase
             if isequal(file, 0)
                 return;
             end
-            fullPath = fullfile(path, file);
             try
-                [img, map] = imread(fullPath);
-                if ~isempty(map), img = ind2rgb(img, map); end
-                app.OriginalImage = im2uint8(img);
+                app.loadImageFile(fullfile(path,file));
             catch
-                app.StatusLabel.Text = 'Unable to read image.';
-                return;
+                app.StatusLabel.Text = 'Unable to load image.';
             end
-            app.StatusLabel.Text = sprintf('Loaded image: %s', file);
-            app.updateImageAndDisplay();
         end
 
         function onSaveButtonPushed(app)
@@ -233,9 +227,11 @@ classdef SmartPixelProcessorApp < matlab.apps.AppBase
             if isequal(file, 0)
                 return;
             end
-            fullPath = fullfile(path, file);
-            imwrite(app.ProcessedImage, fullPath);
-            app.StatusLabel.Text = sprintf('Saved processed image: %s', file);
+            try
+                app.saveImageFile(fullfile(path,file));
+            catch
+                app.StatusLabel.Text = 'Unable to save image.';
+            end
         end
 
         function onResetButtonPushed(app)
@@ -263,6 +259,24 @@ classdef SmartPixelProcessorApp < matlab.apps.AppBase
             if ~isempty(app.UIFigure) && isvalid(app.UIFigure)
                 delete(app.UIFigure);
             end
+        end
+
+        function loadImageFile(app, filename)
+            [img,map] = imread(filename);
+            if ~isempty(map), img = ind2rgb(img,map); end
+            if ~(ismatrix(img) || (ndims(img)==3 && size(img,3)==3))
+                error('SmartPixel:InvalidImage','Expected grayscale or RGB image.');
+            end
+            app.OriginalImage = im2uint8(img);
+            app.updateImageAndDisplay();
+        end
+
+        function saveImageFile(app, filename)
+            if isempty(app.ProcessedImage)
+                error('SmartPixel:NoImage','Load an image first.');
+            end
+            imwrite(app.ProcessedImage,filename);
+            app.StatusLabel.Text = 'Processed image saved.';
         end
 
         function resetControls(app)
