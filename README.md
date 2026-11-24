@@ -44,14 +44,14 @@ SmartPixelProcessor is a powerful MATLAB App Designer application for interactiv
 2. Run the maintained class implementation:
 ```matlab
 addpath('src');
-app = SmartPixelProcessor();
+app = SmartPixelProcessorApp();
 ```
-The original `.mlapp` is retained as a historical App Designer artifact and has not been synchronized with this class.
+The maintained class is named `SmartPixelProcessorApp` to avoid MATLAB resolving the same-named legacy `.mlapp` instead. The original `.mlapp` is retained as a historical App Designer artifact and has not been synchronized with this class.
 
 ### Alternative Method (Class-based):
 Run directly from the instantiated class:
 ```matlab
-app = SmartPixelProcessor;
+app = SmartPixelProcessorApp();
 ```
 
 ---

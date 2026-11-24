@@ -13,7 +13,7 @@ classdef test_SmartPixelProcessor < matlab.unittest.TestCase
 
     methods (Test)
         function testGrayscaleConversion(testCase)
-            app = SmartPixelProcessor;
+            app = SmartPixelProcessorApp;
             testCase.addTeardown(@() delete(app));
             image = uint8(cat(3, 255, 0, 0));
             app.GrayscaleSwitch.Value = 'On';
@@ -24,7 +24,7 @@ classdef test_SmartPixelProcessor < matlab.unittest.TestCase
         end
 
         function testLinearTransformClamping(testCase)
-            app = SmartPixelProcessor;
+            app = SmartPixelProcessorApp;
             testCase.addTeardown(@() delete(app));
             img = uint8([0, 255]);
             app.ContrastSlider.Value = 50;
@@ -35,7 +35,7 @@ classdef test_SmartPixelProcessor < matlab.unittest.TestCase
         end
 
         function testEdgeDetectionBinaryUint8(testCase)
-            app = SmartPixelProcessor;
+            app = SmartPixelProcessorApp;
             testCase.addTeardown(@() delete(app));
             img = uint8(ones(10, 10) * 128);
             app.EdgeDetectionSwitch.Value = 'On';
@@ -47,7 +47,7 @@ classdef test_SmartPixelProcessor < matlab.unittest.TestCase
         end
 
         function testResetReturnsSlidersToZero(testCase)
-            app = SmartPixelProcessor;
+            app = SmartPixelProcessorApp;
             testCase.addTeardown(@() delete(app));
             app.BrightnessSlider.Value = 50;
             app.ContrastSlider.Value = -25;

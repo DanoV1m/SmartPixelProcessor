@@ -3,7 +3,7 @@
 % Add src folder to the MATLAB path so the app can be resolved
 addpath(fullfile(fileparts(mfilename('fullpath')), '../src'));
 
-app = SmartPixelProcessor;
+app = SmartPixelProcessorApp;
 cleanup = onCleanup(@() delete(app));
 
 % Create a synthetic checkerboard image
