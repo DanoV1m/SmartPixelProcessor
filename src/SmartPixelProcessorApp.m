@@ -15,6 +15,8 @@ classdef SmartPixelProcessorApp < matlab.apps.AppBase
         EdgeDetectionSwitch matlab.ui.control.ToggleSwitch
         EdgeMethodDropDown matlab.ui.control.DropDown
         FilterDropDown matlab.ui.control.DropDown
+        AnalysisDropDown matlab.ui.control.DropDown
+        QualityLabel matlab.ui.control.Label
         LoadButton matlab.ui.control.Button
         SaveButton matlab.ui.control.Button
         ResetButton matlab.ui.control.Button
@@ -48,7 +50,26 @@ classdef SmartPixelProcessorApp < matlab.apps.AppBase
             app.OriginalImageAxes.Visible = 'off';
             imshow(app.ProcessedImage, 'Parent', app.ProcessedImageAxes);
             app.ProcessedImageAxes.Visible = 'off';
-            app.updateHistogram(app.ProcessedImage);
+            if strcmp(app.AnalysisDropDown.Value,'FFT')
+                spectrum = pixelSpectrum(app.ProcessedImage);
+                imagesc(app.HistogramAxes,spectrum);
+                axis(app.HistogramAxes,'image');
+                app.HistogramAxes.XLimMode = 'auto';
+                app.HistogramAxes.YLimMode = 'auto';
+                title(app.HistogramAxes,'Centered log-magnitude FFT');
+                xlabel(app.HistogramAxes,'Frequency bin');
+                ylabel(app.HistogramAxes,'Frequency bin');
+            else
+                axis(app.HistogramAxes,'normal');
+                app.HistogramAxes.YLimMode = 'auto';
+                app.updateHistogram(app.ProcessedImage);
+            end
+            if isequal(size(app.OriginalImage),size(app.ProcessedImage))
+                [p,s] = pixelQuality(app.OriginalImage,app.ProcessedImage);
+                app.QualityLabel.Text = sprintf('PSNR: %.2f dB | SSIM: %.4f',p,s);
+            else
+                app.QualityLabel.Text = 'PSNR / SSIM: not comparable (different dimensions)';
+            end
             app.StatusLabel.Text = 'Processed image updated.';
         end
 
@@ -156,6 +177,13 @@ classdef SmartPixelProcessorApp < matlab.apps.AppBase
                 'Value','None','ValueChangedFcn', @(src,event) app.onParameterChanged());
             uilabel(app.UIFigure,'Position',[345,120,100,22],'Text','Spatial filter');
 
+            app.AnalysisDropDown = uidropdown(app.UIFigure, ...
+                'Position',[780,120,150,22],'Items',{'Histogram','FFT'}, ...
+                'Value','Histogram','ValueChangedFcn',@(src,event) app.onParameterChanged());
+            uilabel(app.UIFigure,'Position',[675,120,100,22],'Text','Analysis');
+            app.QualityLabel = uilabel(app.UIFigure,'Position',[700,180,500,22], ...
+                'Text','PSNR / SSIM: load an image');
+
             app.LoadButton = uibutton(app.UIFigure, 'push', ...
                 'Text', 'Load', 'Position', [25, 60, 100, 35], ...
                 'ButtonPushedFcn', @(src, event) app.onLoadButtonPushed());
@@ -217,6 +245,7 @@ classdef SmartPixelProcessorApp < matlab.apps.AppBase
             app.EdgeDetectionSwitch.Value = 'Off';
             app.EdgeMethodDropDown.Value = 'Canny';
             app.FilterDropDown.Value = 'None';
+            app.AnalysisDropDown.Value = 'Histogram';
             app.setFormula();
             app.updateImageAndDisplay();
             app.StatusLabel.Text = 'Reset controls to default values.';

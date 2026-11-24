@@ -290,3 +290,6 @@ Run `addpath('src'); runtests('tests')` in MATLAB R2024a with Image Processing T
 
 ### Spatial filters
 The maintained app supports Gaussian smoothing (sigma 1), 3-by-3 median filtering and unsharp masking. Filters run after intensity clipping and before optional edge detection. `pixelFilter` and `pixelSpectrum` are callable independently of the UI. The legacy App Designer file is not synchronized.
+
+### Frequency analysis and similarity metrics
+The analysis selector switches between histogram and centered log-magnitude FFT. PSNR and mean per-channel SSIM compare same-size uint8 images against the loaded original; they are similarity measures, not proof that filtering improves quality. Grayscale conversion of RGB or edge extraction changing dimensions makes the direct comparison unavailable.
