@@ -287,3 +287,6 @@ flowchart TD
 
 ## Validation
 Run `addpath('src'); runtests('tests')` in MATLAB R2024a with Image Processing Toolbox. The proposed class changes require MATLAB execution before release.
+
+### Spatial filters
+The maintained app supports Gaussian smoothing (sigma 1), 3-by-3 median filtering and unsharp masking. Filters run after intensity clipping and before optional edge detection. `pixelFilter` and `pixelSpectrum` are callable independently of the UI. The legacy App Designer file is not synchronized.

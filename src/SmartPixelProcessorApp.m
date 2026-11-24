@@ -14,6 +14,7 @@ classdef SmartPixelProcessorApp < matlab.apps.AppBase
         GrayscaleSwitch matlab.ui.control.ToggleSwitch
         EdgeDetectionSwitch matlab.ui.control.ToggleSwitch
         EdgeMethodDropDown matlab.ui.control.DropDown
+        FilterDropDown matlab.ui.control.DropDown
         LoadButton matlab.ui.control.Button
         SaveButton matlab.ui.control.Button
         ResetButton matlab.ui.control.Button
@@ -150,6 +151,11 @@ classdef SmartPixelProcessorApp < matlab.apps.AppBase
                 'ValueChangedFcn', @(src, event) app.onParameterChanged());
             uilabel(app.UIFigure, 'Position', [25, 120, 120, 22], 'Text', 'Edge Method');
 
+            app.FilterDropDown = uidropdown(app.UIFigure, ...
+                'Position', [450, 120, 150, 22], 'Items', {'None','Gaussian','Median','Sharpen'}, ...
+                'Value','None','ValueChangedFcn', @(src,event) app.onParameterChanged());
+            uilabel(app.UIFigure,'Position',[345,120,100,22],'Text','Spatial filter');
+
             app.LoadButton = uibutton(app.UIFigure, 'push', ...
                 'Text', 'Load', 'Position', [25, 60, 100, 35], ...
                 'ButtonPushedFcn', @(src, event) app.onLoadButtonPushed());
@@ -178,8 +184,14 @@ classdef SmartPixelProcessorApp < matlab.apps.AppBase
                 return;
             end
             fullPath = fullfile(path, file);
-            img = imread(fullPath);
-            app.OriginalImage = im2uint8(img);
+            try
+                [img, map] = imread(fullPath);
+                if ~isempty(map), img = ind2rgb(img, map); end
+                app.OriginalImage = im2uint8(img);
+            catch
+                app.StatusLabel.Text = 'Unable to read image.';
+                return;
+            end
             app.StatusLabel.Text = sprintf('Loaded image: %s', file);
             app.updateImageAndDisplay();
         end
@@ -204,6 +216,7 @@ classdef SmartPixelProcessorApp < matlab.apps.AppBase
             app.GrayscaleSwitch.Value = 'Off';
             app.EdgeDetectionSwitch.Value = 'Off';
             app.EdgeMethodDropDown.Value = 'Canny';
+            app.FilterDropDown.Value = 'None';
             app.setFormula();
             app.updateImageAndDisplay();
             app.StatusLabel.Text = 'Reset controls to default values.';
@@ -241,6 +254,7 @@ classdef SmartPixelProcessorApp < matlab.apps.AppBase
             end
             image = app.applyLinearTransform(image);
             image = app.clipImage(image);
+            image = pixelFilter(image, app.FilterDropDown.Value);
             if strcmp(app.EdgeDetectionSwitch.Value, 'On')
                 image = app.detectEdges(image);
             end
